@@ -200,7 +200,8 @@ if (document.URL.substring(0, dsturl1.length) === dsturl1) {
 					sessionStorage.removeItem('psgInfoPerPrnb3');
 					sessionStorage.removeItem('locSeatAttCd1');
 					sessionStorage.removeItem('rqSeatAttCd1');
-					chrome.runtime.sendMessage({type: 'playSound'}, function(data) { });
+
+					chrome.runtime.sendMessage({type: 'playSound'});
 				} else {
 					setTimeout(function() {
 					//location.reload();

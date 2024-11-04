@@ -6,6 +6,10 @@
   "icons": {
       "128": "images/icon128.png"
   },
+  "permissions": [
+    "audio",
+    "offscreen"
+  ],
   "content_scripts": [ {
     "all_frames": true,
     "js": ["jquery-1.11.3.min.js", "content.js"],

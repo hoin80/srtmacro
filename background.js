@@ -1,14 +1,18 @@
-function playSound() {
-	if (typeof(audio) != "undefined" && audio) {
-		audio.pause();
-		document.body.removeChild(audio);
-		audio = null;
+async function playSound(source = "assets/tada.mp3") {
+	await createOffscreen();
+	await chrome.runtime.sendMessage({ play: { source }});
+}
+
+async function createOffscreen() {
+	if (await chrome.offscreen.hasDocument()) {
+		return;
 	}
-	audio = document.createElement('audio');
-	document.body.appendChild(audio);
-	audio.autoplay = true;
-	audio.src = chrome.extension.getURL('assets/tada.mp3');
-	audio.play();
+
+	await chrome.offscreen.createDocument({
+		url: "offscreen.html",
+		reasons: ["AUDIO_PLAYBACK"],
+		justification: "alram"
+	});
 }
 
 function sendMessageToTelegram() {
@@ -29,10 +33,10 @@ function sendMessageToTelegram() {
     }
 }
 
-chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-    if (message && message.type == 'playSound') {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message && message.type === 'playSound') {
 		playSound();
 		sendMessageToTelegram();
-        sendResponse(true);
+		sendResponse(true);
     }
 });
